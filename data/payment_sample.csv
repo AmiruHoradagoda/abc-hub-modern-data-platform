@@ -1,0 +1,3 @@
+payment_id,customer_id,rental_id,subscription_id,payment_method_id,amount,payment_date,payment_type,status,created_at,updated_at
+1,1,,1,1,4.99,6/6/2025 19:38,Subscription,Completed,6/6/2025 19:38,6/6/2025 19:38
+2,1,,1,1,4.99,7/6/2025 20:05,Subscription,Completed,7/6/2025 20:05,7/6/2025 20:05

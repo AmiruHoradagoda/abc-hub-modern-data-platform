@@ -1,0 +1,5 @@
+artist_id,artist_name,country,created_at,updated_at
+1,Sample artist 1,Australia,2023-05-01 20:12:43,2023-05-01 20:12:43
+2,Sample artist 2,Malaysia,2023-05-04 18:05:11,2023-05-04 18:05:11
+222,Sample artist 222,South Africa,2023-05-03 22:40:16,2023-05-03 22:40:16
+244,Sample artist 244,United States,2023-05-04 23:22:24,2023-05-04 23:22:24

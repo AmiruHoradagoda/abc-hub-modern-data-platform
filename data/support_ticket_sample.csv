@@ -1,0 +1,3 @@
+ticket_id,customer_id,category_id,opened_date,closed_date,priority,status,created_at,updated_at
+1,71,4,2026-05-25 08:34:43,2026-05-26 19:34:43,High,Closed,2026-05-25 08:34:43,2026-05-26 19:34:43
+2,503,2,2026-05-27 15:25:02,,High,In Progress,2026-05-27 15:25:02,2026-05-27 15:25:02

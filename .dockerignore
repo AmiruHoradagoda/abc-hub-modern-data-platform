@@ -1,0 +1,4 @@
+# The NiFi image needs only its Dockerfile; datasets and credentials stay out.
+**
+!Dockerfile
+!.dockerignore

@@ -1,0 +1,15 @@
+customer_id,customer_no,first_name,last_name,email,phone,date_of_birth,gender,registration_date,status,created_at,updated_at
+1,SAMPLE-1,Sample,Customer 1,customer1@example.invalid,,,Male,2026-02-04,Active,2026-02-04 22:26:08,2026-02-04 22:26:08
+2,SAMPLE-2,Sample,Customer 2,customer2@example.invalid,,,Male,2025-03-23,Active,2025-03-23 04:50:53,2025-03-23 04:50:53
+71,SAMPLE-71,Sample,Customer 71,customer71@example.invalid,,,Other,2025-01-16,Active,2025-01-16 03:17:18,2025-01-16 03:17:18
+96,SAMPLE-96,Sample,Customer 96,customer96@example.invalid,,,Female,2023-11-05,Active,2023-11-05 04:38:11,2023-11-05 04:38:11
+180,SAMPLE-180,Sample,Customer 180,customer180@example.invalid,,,Male,2024-07-16,Active,2024-07-16 21:05:43,2024-07-16 21:05:43
+263,SAMPLE-263,Sample,Customer 263,customer263@example.invalid,,,Other,2025-12-06,Active,2025-12-06 06:43:05,2025-12-06 06:43:05
+351,SAMPLE-351,Sample,Customer 351,customer351@example.invalid,,,Female,2023-08-11,Active,2023-08-11 04:22:53,2023-08-11 04:22:53
+369,SAMPLE-369,Sample,Customer 369,customer369@example.invalid,,,Other,2025-06-25,Active,2025-06-25 07:27:39,2025-06-25 07:27:39
+495,SAMPLE-495,Sample,Customer 495,customer495@example.invalid,,,Female,2026-03-18,active,2026-03-18 08:30:49,2026-03-18 08:30:49
+503,SAMPLE-503,Sample,Customer 503,customer503@example.invalid,,,Male,2025-09-03,Inactive,2025-09-03 06:15:06,2025-09-03 06:15:06
+580,SAMPLE-580,Sample,Customer 580,customer580@example.invalid,,,Other,2024-05-12,Active,2024-05-12 04:08:45,2024-05-12 04:08:45
+649,SAMPLE-649,Sample,Customer 649,customer649@example.invalid,,,Male,2023-11-09,Active,2023-11-09 15:47:08,2023-11-09 15:47:08
+802,SAMPLE-802,Sample,Customer 802,customer802@example.invalid,,,Female,2023-10-29,Active,2023-10-29 14:37:10,2023-10-29 14:37:10
+992,SAMPLE-992,Sample,Customer 992,customer992@example.invalid,,,Female,2024-03-02,Active,2024-03-02 16:20:39,2024-03-02 16:20:39

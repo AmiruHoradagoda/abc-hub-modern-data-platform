@@ -1,0 +1,41 @@
+# Secrets and local configuration
+.env
+.env.*
+.pgpass
+pgpass.conf
+*.pem
+*.key
+
+# Logs, editor state, caches
+*.log
+.vscode/
+.idea/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+~$*
+
+# Keep full datasets and database archives out of Git
+# Only reviewed sample CSVs are allowed directly under data/
+data/**
+!data/*_sample.csv
+data/raw/
+data/full/
+*.zip
+*.gz
+*.7z
+*.tar
+*.dump
+*.backup
+
+# Local NiFi drivers and runtime state
+*.jar
+nifi/logs/
+nifi/state/
+nifi/database_repository/
+nifi/flowfile_repository/
+nifi/content_repository/
+nifi/provenance_repository/

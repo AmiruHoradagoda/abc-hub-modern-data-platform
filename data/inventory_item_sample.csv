@@ -1,0 +1,5 @@
+inventory_id,content_id,warehouse_id,barcode,purchase_date,item_condition,status,created_at,updated_at
+1,1,1,ABC00000001,2021-09-09,New,Available,2023-05-03 16:46:56,2023-05-03 16:46:56
+2,1,10,ABC00000002,2022-09-04,Good,Retired,2023-05-04 02:47:37,2023-05-04 02:47:37
+156,52,10,ABC00000156,2023-12-09,Good,Rented,2023-12-09 09:11:21,2023-12-09 09:11:21
+1254,417,4,ABC00001254,2023-05-30,Good,Available,2023-05-30 10:04:55,2023-05-30 10:04:55

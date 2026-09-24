@@ -1,0 +1,3 @@
+address_id,customer_id,city_id,address_line,postal_code,address_type,created_at,updated_at
+1,1,9,Sample address 1,,Home,2026-02-05 06:51:50,2026-02-05 06:51:50
+2,2,18,Sample address 2,,Home,2025-03-25 04:13:29,2025-03-25 04:13:29

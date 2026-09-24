@@ -1,0 +1,77 @@
+services:
+  postgres:
+    image: postgres:16@sha256:f1c3376c26f2609ab9f29f71f824103fe2fcd8ee0346485cb6122a4f93df6f94
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-abc_hub}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your local .env}
+      POSTGRES_DB: abc_hub_operational
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - type: bind
+        source: ./sql
+        target: /input/sql
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${ABC_HUB_DATA_DIR:-./data}
+        target: /input/data
+        read_only: true
+        bind:
+          create_host_path: false
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d abc_hub_operational"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+
+  nifi:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      SINGLE_USER_CREDENTIALS_USERNAME: ${NIFI_USERNAME:-admin}
+      SINGLE_USER_CREDENTIALS_PASSWORD: ${NIFI_PASSWORD:?Set NIFI_PASSWORD to at least 12 characters in your local .env}
+      NIFI_SENSITIVE_PROPS_KEY: ${NIFI_SENSITIVE_PROPS_KEY:?Set a stable private NIFI_SENSITIVE_PROPS_KEY in your local .env}
+      NIFI_WEB_HTTPS_HOST: 0.0.0.0
+      NIFI_WEB_HTTPS_PORT: "8443"
+      NIFI_WEB_PROXY_HOST: "localhost:${NIFI_PORT:-9443},127.0.0.1:${NIFI_PORT:-9443}"
+      NIFI_JVM_HEAP_INIT: 512m
+      NIFI_JVM_HEAP_MAX: 1g
+    ports:
+      - "127.0.0.1:${NIFI_PORT:-9443}:8443"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - nifi_conf:/opt/nifi/nifi-current/conf
+      - nifi_state:/opt/nifi/nifi-current/state
+      - nifi_database:/opt/nifi/nifi-current/database_repository
+      - nifi_flowfiles:/opt/nifi/nifi-current/flowfile_repository
+      - nifi_content:/opt/nifi/nifi-current/content_repository
+      - nifi_provenance:/opt/nifi/nifi-current/provenance_repository
+      - nifi_logs:/opt/nifi/nifi-current/logs
+      - nifi_extensions:/opt/nifi/nifi-current/nar_extensions
+      - nifi_python:/opt/nifi/nifi-current/python_extensions
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "--silent", "--insecure", "https://localhost:8443/nifi/"]
+      interval: 15s
+      timeout: 10s
+      retries: 24
+      start_period: 60s
+    stop_grace_period: 60s
+
+volumes:
+  postgres_data:
+  nifi_conf:
+  nifi_state:
+  nifi_database:
+  nifi_flowfiles:
+  nifi_content:
+  nifi_provenance:
+  nifi_logs:
+  nifi_extensions:
+  nifi_python:
