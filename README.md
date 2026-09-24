@@ -123,6 +123,64 @@ Run `DIMENSION_TRIGGER` first, then `FACT_TRIGGER` after dimension keys are avai
 
 *Separate Dimension and Fact stages organize the dimensional loads.*
 
+## Execution Results
+
+The execution screenshots verify populated Gold tables and returned analytical query results. They provide evidence of these outputs, without establishing full automated pipeline validation or source-to-target reconciliation.
+
+### Gold Layer Row Counts
+
+The captured counts show that the following Gold-layer tables were successfully populated. These are counts from the captured execution, not expected results for the repository's reduced sample dataset.
+
+| Gold table | Row count |
+| --- | ---: |
+| `dim_customer` | 1,008 |
+| `dim_content` | 600 |
+| `dim_inventory` | 1,785 |
+| `fact_customer_daily_activity` | 58,480 |
+| `fact_content_monthly_performance` | 7,099 |
+| `fact_inventory_daily_utilisation` | 2,806,545 |
+
+![Populated Gold dimension and fact table row counts](docs/results/gold_table_counts.png)
+
+*Row counts for three Gold dimensions and all three fact tables.*
+
+### Populated Fact Table
+
+`gold.fact_customer_daily_activity` contains populated analytical rows. The screenshot shows 20 returned rows, including customer, date, and location keys, from this query:
+
+```sql
+SELECT *
+FROM gold.fact_customer_daily_activity
+LIMIT 20;
+```
+
+![Populated customer daily activity fact table](docs/results/populated_fact_table.png)
+
+*Sample records returned from the customer daily activity fact table.*
+
+### Sample Analytical Query
+
+The Gold dimensional model supports analytical queries by joining facts with dimensions. This query joins `gold.fact_content_monthly_performance` with `gold.dim_content` and returns content titles and monthly measures, ordered by `total_streams` descending:
+
+```sql
+SELECT
+    c.title,
+    f.month_key,
+    f.total_streams,
+    f.total_rental_count,
+    f.revenue_generated,
+    f.average_customer_rating,
+    f.wishlist_additions
+FROM gold.fact_content_monthly_performance f
+JOIN gold.dim_content c ON f.content_key = c.content_key
+ORDER BY f.total_streams DESC
+LIMIT 10;
+```
+
+![Gold analytical query returning content monthly performance](docs/results/sample_query_result.png)
+
+*Returned content performance results, including streams, rentals, revenue, ratings, and wishlist additions.*
+
 ## 8. Project Structure
 
 ```text
@@ -149,7 +207,7 @@ abc-hub-modern-data-platform/
 4. **Run ETL in order:** Bronze → Silver Core → Silver Links → Gold Dimensions → Gold Facts. Verify each stage before starting the next.
 5. **Validate:** run [validation_queries.sql](sql/validation_queries.sql) against `abc_hub_analytics`; review row counts, duplicate keys, missing relationships, and fact grains.
 
-**Verified so far:** the documented sample import loaded 99 rows across 26 source tables, and the warehouse scripts created 54 tables in an isolated PostgreSQL container.
+**Verified so far:** the documented sample import loaded 99 rows across 26 source tables, and the warehouse scripts created 54 tables in an isolated PostgreSQL container. The [execution screenshots](#execution-results) additionally show populated Gold tables and a fact-to-dimension analytical query returning results.
 
 ## 10. Key Engineering Decisions
 
@@ -158,17 +216,30 @@ abc-hub-modern-data-platform/
 - **NiFi with a bundled JDBC driver** makes the local runtime easier to reproduce; database setup and CSV loading remain manual.
 - **Small, related samples** make the project easier to try while keeping the full course dataset outside the repository.
 
-## 11. Known Limitations
+## 11. Assumptions
+
+The implementation was developed using the following assumptions:
+
+- Daily refresh is sufficient for the analytical reporting requirements.
+- Bronze data represents source-aligned operational records with ingestion metadata.
+- Silver Hubs and Satellites are loaded before Links so that the required business keys exist.
+- Gold Dimensions are loaded before Fact tables so that dimension keys are available when facts are created.
+- Historical records are retained in the Silver Data Vault layer rather than overwriting previous descriptive values.
+- The Gold layer is designed primarily for analytical reporting rather than operational transactions.
+- Where multiple genres are associated with the same content, a deterministic genre is selected for the current dimensional model.
+- The repository contains reduced sample datasets for reproducibility; the full assignment dataset can be loaded using the same pipeline.
+
+## 12. Known Limitations
 
 - Complete change capture, safe repeated loads, and automatic stage coordination are not implemented. Independent triggers require controlled execution.
 - Date/month generation covers **2020–2030**; persisted ETL monitoring is not implemented.
-- End-to-end NiFi execution has not been independently verified here. Screenshots capture flow state, not data reconciliation.
+- Execution screenshots verify populated Gold tables and returned sample analytical query results. Full automated end-to-end validation and source-to-target reconciliation are not established by this evidence.
 - Validation reports issues without automatically failing on findings. Report diagrams may differ from the implemented SQL.
 
-## 12. Future Improvements
+## 13. Future Improvements
 
 Reliable incremental loads and retries · Stage coordination · Automated quality checks · ETL monitoring · BI dashboards
 
-## 13. Project Report
+## 14. Project Report
 
 The [final project report (PDF)](docs/Final_Report.pdf) documents the design and implementation. Explore the [operational ER diagram](docs/operational_er_diagram.pdf) and the pipeline screenshots linked above for supporting detail.
