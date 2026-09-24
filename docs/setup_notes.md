@@ -106,7 +106,7 @@ Import [ABC_HUB_ETL.json](../nifi/ABC_HUB_ETL.json) as a process group. Keep pro
 | Database Driver Locations | `/opt/nifi/drivers/postgresql-42.7.12.jar` | `/opt/nifi/drivers/postgresql-42.7.12.jar` |
 | Database User / Password | PostgreSQL credentials from `.env` | Same credentials |
 
-Enter credentials in NiFi; `.env` does not configure these pools automatically. Enable both pools, `AvroReader`, and `AvroRecordSetWriter`. Resolve validation errors, then follow the [ETL run order](../README.md#9-how-to-run). Keep the independent triggers controlled and wait for each stage to finish.
+Enter credentials in NiFi; `.env` does not configure these pools automatically. Enable both pools, `AvroReader`, and `AvroRecordSetWriter`. Resolve validation errors, then follow the [ETL run order](../README.md#10-how-to-run). Keep the independent triggers controlled and wait for each stage to finish.
 
 ## Alternative: NiFi with existing PostgreSQL
 

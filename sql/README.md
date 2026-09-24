@@ -2,6 +2,28 @@
 
 Use psql with `ON_ERROR_STOP=1`. Paths below assume the project root, or `/input` inside the Compose PostgreSQL container. See [setup notes](../docs/setup_notes.md) for database creation and CSV loading.
 
+## Database/table creation order
+
+1. `create_databases.sql`
+2. `operational_schema.sql`
+3. `setup.sql`
+4. `bronze_tables.sql`
+5. `silver_hubs.sql`
+6. `silver_links.sql`
+7. `silver_satellites.sql`
+8. `gold_dimensions.sql`
+9. `gold_facts.sql`
+10. `indexes_constraints.sql`
+
+Run database creation while connected to the default `postgres` database, outside a transaction, **only when both project databases are absent**:
+
+```sql
+\connect postgres
+\i sql/create_databases.sql
+```
+
+Skip this script if the databases already exist; it is not safe to rerun. If only one exists, create only the missing database manually. Compose creates `abc_hub_operational` on a fresh volume, so create only `abc_hub_analytics` in that case, as described in the setup notes.
+
 ## 1. Operational tables
 
 Run only on a new, empty source database: this script drops and recreates `public`.
@@ -33,7 +55,7 @@ This creates the three schemas and 54 tables: 26 Bronze, 15 Silver, and 13 Gold.
 
 ## 3. Run ETL, then validate
 
-NiFi loading order: **Bronze -> Silver Core -> Silver Links -> Gold Dimensions -> Gold Facts**. This is the data-loading order; it differs from table-creation order.
+**NiFi data loading order:** **Bronze -> Silver Core -> Silver Links -> Gold Dimensions -> Gold Facts**. This is the data-loading order; it differs from table-creation order.
 
 After all stages finish:
 

@@ -123,7 +123,7 @@ Run `DIMENSION_TRIGGER` first, then `FACT_TRIGGER` after dimension keys are avai
 
 *Separate Dimension and Fact stages organize the dimensional loads.*
 
-## Execution Results
+## 8. Execution Results
 
 The execution screenshots verify populated Gold tables and returned analytical query results. They provide evidence of these outputs, without establishing full automated pipeline validation or source-to-target reconciliation.
 
@@ -181,7 +181,7 @@ LIMIT 10;
 
 *Returned content performance results, including streams, rentals, revenue, ratings, and wishlist additions.*
 
-## 8. Project Structure
+## 9. Project Structure
 
 ```text
 abc-hub-modern-data-platform/
@@ -191,15 +191,20 @@ abc-hub-modern-data-platform/
 |   |-- Final_Report.pdf          # Final project report
 |   |-- operational_er_diagram.pdf
 |   |-- diagrams/                 # Architecture and data models
-|   `-- pipeline/                 # NiFi screenshots
+|   |-- pipeline/                 # NiFi screenshots
+|   `-- results/                  # Execution evidence
+|       |-- gold_table_counts.png
+|       |-- populated_fact_table.png
+|       `-- sample_query_result.png
 |-- nifi/ABC_HUB_ETL.json          # Importable ETL flow
 |-- sql/                          # DDL, validation, and execution guide
+|   `-- create_databases.sql       # Fresh database creation
 |-- Dockerfile                    # NiFi with PostgreSQL JDBC
 |-- compose.yaml                  # Local NiFi and PostgreSQL services
 `-- README.md
 ```
 
-## 9. How to Run
+## 10. How to Run
 
 1. **Start the services:** follow the [setup guide](docs/setup_notes.md) for Docker and local configuration.
 2. **Prepare the databases:** create operational tables, load CSVs with `\copy`, and follow the [SQL execution order](sql/README.md) for warehouse tables.
@@ -207,16 +212,16 @@ abc-hub-modern-data-platform/
 4. **Run ETL in order:** Bronze → Silver Core → Silver Links → Gold Dimensions → Gold Facts. Verify each stage before starting the next.
 5. **Validate:** run [validation_queries.sql](sql/validation_queries.sql) against `abc_hub_analytics`; review row counts, duplicate keys, missing relationships, and fact grains.
 
-**Verified so far:** the documented sample import loaded 99 rows across 26 source tables, and the warehouse scripts created 54 tables in an isolated PostgreSQL container. The [execution screenshots](#execution-results) additionally show populated Gold tables and a fact-to-dimension analytical query returning results.
+**Verified so far:** the documented sample import loaded 99 rows across 26 source tables, and the warehouse scripts created 54 tables in an isolated PostgreSQL container. The [execution screenshots](#8-execution-results) additionally show populated Gold tables and a fact-to-dimension analytical query returning results.
 
-## 10. Key Engineering Decisions
+## 11. Key Engineering Decisions
 
 - **Separate databases** keep operational records apart from analytical transformations.
 - **Three warehouse layers** support source traceability, business integration, and dimensional reporting.
 - **NiFi with a bundled JDBC driver** makes the local runtime easier to reproduce; database setup and CSV loading remain manual.
 - **Small, related samples** make the project easier to try while keeping the full course dataset outside the repository.
 
-## 11. Assumptions
+## 12. Assumptions
 
 The implementation was developed using the following assumptions:
 
@@ -229,17 +234,17 @@ The implementation was developed using the following assumptions:
 - Where multiple genres are associated with the same content, a deterministic genre is selected for the current dimensional model.
 - The repository contains reduced sample datasets for reproducibility; the full assignment dataset can be loaded using the same pipeline.
 
-## 12. Known Limitations
+## 13. Known Limitations
 
 - Complete change capture, safe repeated loads, and automatic stage coordination are not implemented. Independent triggers require controlled execution.
 - Date/month generation covers **2020–2030**; persisted ETL monitoring is not implemented.
 - Execution screenshots verify populated Gold tables and returned sample analytical query results. Full automated end-to-end validation and source-to-target reconciliation are not established by this evidence.
 - Validation reports issues without automatically failing on findings. Report diagrams may differ from the implemented SQL.
 
-## 13. Future Improvements
+## 14. Future Improvements
 
 Reliable incremental loads and retries · Stage coordination · Automated quality checks · ETL monitoring · BI dashboards
 
-## 14. Project Report
+## 15. Project Report
 
 The [final project report (PDF)](docs/Final_Report.pdf) documents the design and implementation. Explore the [operational ER diagram](docs/operational_er_diagram.pdf) and the pipeline screenshots linked above for supporting detail.
